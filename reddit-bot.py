@@ -34,7 +34,7 @@ pattern7 = re.compile(r"""(?:s|season)(?P<s>\d+)(?:.*)(?:e|x|episode|\n)(?:\s)(?
 patterns = [pattern1, pattern2, pattern3, pattern4, pattern5, pattern6, pattern7 ]
 
 def run_bot():
-	subreddit = r.get_subreddit("test")
+	subreddit = r.get_subreddit("seinfeld")
 	comments = subreddit.get_comments(limit=25)
 	for comment in comments:
 		comment_text = comment.body.lower()
