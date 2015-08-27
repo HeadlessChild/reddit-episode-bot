@@ -41,10 +41,14 @@ def run_bot():
 				try:
 					episode_info = t[tvshow][int(m.group('s'))][int(m.group('ep'))]
 					comment.reply('Seinfeld Season '+m.group('s')+' Episode '+m.group('ep')+\
+								  '\n___\n'\
 								  '\n\nEpisode Name: '+episode_info['episodename']+\
 								  '\n\nOverview: '+episode_info['overview']+\
 								  '\n\nRating: '+episode_info['rating']+\
-								  '\n___\n')
+								  '\n___\n'\
+								  '^| [^Help ^me ^improve!](https://github.com/HeadlessChild/reddit-episode-bot)'\
+								  '^| [^Report ^a ^bug](https://github.com/HeadlessChild/reddit-episode-bot/issues)'\
+								  '^| [^Author](https://www.reddit.com/user/HeadlessChild/)')
 					cache.append(comment.id)
 				except praw.errors.RateLimitExceeded as error:
 					print("Rate limit exceeded, must sleep for "
@@ -52,10 +56,14 @@ def run_bot():
 					time.sleep(error.sleep_time)
 					episode_info = t[tvshow][int(m.group('s'))][int(m.group('ep'))]
 					comment.reply('Seinfeld Season '+m.group('s')+' Episode '+m.group('ep')+\
+								  '\n___\n'+\
 								  '\n\nEpisode Name: '+episode_info['episodename']+\
 								  '\n\nOverview: '+episode_info['overview']+\
 								  '\n\nRating: '+episode_info['rating']+\
-								  '\n___\n')
+								  '\n___\n'\
+								  '^| [^Help ^me ^improve!](https://github.com/HeadlessChild/reddit-episode-bot)'\
+								  '^| [^Report ^a ^bug](https://github.com/HeadlessChild/reddit-episode-bot/issues)'\
+								  '^| [^Author](https://www.reddit.com/user/HeadlessChild/)')
 					cache.append(comment.id)
 
 while True:
