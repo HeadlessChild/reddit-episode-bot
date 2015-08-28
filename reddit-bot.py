@@ -1,6 +1,7 @@
 import re
 import praw
 import time
+import MySQLdb
 import tvdb_api
 from configparser import ConfigParser
 
@@ -10,10 +11,6 @@ t = tvdb_api.Tvdb()
 
 r = praw.Reddit("browser-based:SeinfeldEpsisode Script:v1.0 (by /u/HeadlessChild)")
 
-#Load comment id's
-with open('comment-ids.txt') as f:
-	cache = f.read().splitlines()
-
 ### LOGIN ###
 config = ConfigParser()
 config.read("login.txt")
@@ -22,6 +19,20 @@ username = config.get("Reddit", "Username")
 password = config.get("Reddit", "Password")
 
 r.login(username, password, disable_warning=True)
+############
+
+### DATABASE ###
+db_username = config.get("MySQL", "Username")
+db_password = config.get("MySQL", "Password")
+db = MySQLdb.connect(host="localhost",
+					 user=db_username,
+					 passwd=db_password,
+					 db="reddit_comments")
+cur = db.cursor()
+
+cur.execute('CREATE TABLE IF NOT EXISTS comments(ID TEXT)')
+db.commit()
+############
 
 pattern1 = re.compile(r"""(?:s|season)(?:\s)(?P<s>\d+)(?:.*)(?:e|x|episode|\n)(?:\s)(?P<ep>\d+)""", re.VERBOSE)
 pattern2 = re.compile(r"""(?:s|season)(?P<s>\d+)(?:e|x|episode|\n)(?:\s)(?P<ep>\d+)""", re.VERBOSE)
@@ -40,7 +51,10 @@ def run_bot():
 		comment_text = comment.body.lower()
 		for p in patterns:
 			m = re.search(p, comment_text)
-			if m and comment.id not in cache and str(comment.author) != str(username):
+			ID = comment.id
+			cur.execute('SELECT * FROM comments WHERE ID=(%s)', [ID])
+			result = cur.fetchone()
+			if m and not result and str(comment.author) != str(username):
 				try:
 					episode_info = t[tvshow][int(m.group('s'))][int(m.group('ep'))]
 					comment.reply('**Seinfeld: Season '+m.group('s')+' Episode '+m.group('ep')+'**'+\
@@ -56,10 +70,8 @@ def run_bot():
 								  '^| [^Report ^a ^bug](https://github.com/HeadlessChild/reddit-episode-bot/issues) '\
 								  '^| [^Author](https://www.reddit.com/user/HeadlessChild/) '\
 								  '^| ^Data ^from ^[TheTVDB](http://thetvdb.com/) ')
-					cache.append(comment.id)
-					for i in cache:
-						with open('comment-ids.txt', 'ab') as f:
-							f.write(i+"\n")
+					cur.execute('INSERT INTO comments (ID) VALUES (%s)', [ID])
+					db.commit()
 				except praw.errors.RateLimitExceeded as error:
 					print("Rate limit exceeded, must sleep for "
 							"{} mins".format(float(error.sleep_time / 60)))
@@ -78,11 +90,8 @@ def run_bot():
 								  '^| [^Report ^a ^bug](https://github.com/HeadlessChild/reddit-episode-bot/issues) '\
 								  '^| [^Author](https://www.reddit.com/user/HeadlessChild/) '\
 								  '^| ^Data ^from ^[TheTVDB](http://thetvdb.com/) ')
-					cache.append(comment.id)
-					for i in cache:
-						with open('comment-ids.txt', 'ab') as f:
-							f.write(i+"\n")
-
+					cur.execute('INSERT INTO comments (ID) VALUES (%s)', [ID])
+					db.commit()
 
 while True:
 	run_bot()
