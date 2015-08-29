@@ -66,13 +66,14 @@ def run_bot():
 									  '\n\n**Overview:** '+episode_info['overview']+\
 									  '\n\n**Director:** '+episode_info['director']+\
 									  '\n\n**Writer(s):** '+episode_info['writer']+\
+									  '\n\n**First Aired:** '+episode_info['firstaired']+\
 									  '\n\n**Rating:** '+episode_info['rating']+\
 									  '\n___\n'\
 									  '^| ^Hi! ^I\'m ^a ^bot ^for ^the ^subreddit [^/r/seinfeld](https://www.reddit.com/r/seinfeld) '\
 									  '^| [^Help ^me ^improve!](https://github.com/HeadlessChild/reddit-episode-bot) '\
 									  '^| [^Report ^a ^bug](https://github.com/HeadlessChild/reddit-episode-bot/issues) '\
 									  '^| [^Author](https://www.reddit.com/user/HeadlessChild/) '\
-									  '^| ^Data ^from ^[TheTVDB](http://thetvdb.com/) ')
+									  '^| ^Data ^from ^[TheTVDB](http://thetvdb.com/) ^|')
 						cur.execute('INSERT INTO comments (ID) VALUES (%s)', [ID])
 						db.commit()
 					except (tvdb_exceptions.tvdb_seasonnotfound, tvdb_exceptions.tvdb_episodenotfound):
@@ -88,13 +89,14 @@ def run_bot():
 								  '\n\n**Overview:** '+episode_info['overview']+\
 								  '\n\n**Director:** '+episode_info['director']+\
 								  '\n\n**Writer(s):** '+episode_info['writer']+\
+								  '\n\n**First Aired:** '+episode_info['firstaired']+\
 								  '\n\n**Rating:** '+episode_info['rating']+\
 								  '\n___\n'\
 								  '^| ^Hi! ^I\'m ^a ^bot ^for ^the ^subreddit [^/r/seinfeld](https://www.reddit.com/r/seinfeld) '\
 								  '^| [^Help ^me ^improve!](https://github.com/HeadlessChild/reddit-episode-bot) '\
 								  '^| [^Report ^a ^bug](https://github.com/HeadlessChild/reddit-episode-bot/issues) '\
 								  '^| [^Author](https://www.reddit.com/user/HeadlessChild/) '\
-								  '^| ^Data ^from ^[TheTVDB](http://thetvdb.com/) ')
+								  '^| ^Data ^from ^[TheTVDB](http://thetvdb.com/) ^|')
 					cur.execute('INSERT INTO comments (ID) VALUES (%s)', [ID])
 					db.commit()
 
