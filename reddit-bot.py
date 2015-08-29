@@ -3,6 +3,8 @@ import praw
 import time
 import MySQLdb
 import tvdb_api
+import tvdb_exceptions
+
 from configparser import ConfigParser
 
 tvshow = "seinfeld"
@@ -46,7 +48,7 @@ patterns = [pattern1, pattern2, pattern3, pattern4, pattern5, pattern6, pattern7
 
 def run_bot():
 	subreddit = r.get_subreddit("seinfeld")
-	comments = subreddit.get_comments(limit=25)
+	comments = subreddit.get_comments(limit=100)
 	for comment in comments:
 		comment_text = comment.body.lower()
 		for p in patterns:
@@ -56,22 +58,25 @@ def run_bot():
 			result = cur.fetchone()
 			if m and not result and str(comment.author) != str(username):
 				try:
-					episode_info = t[tvshow][int(m.group('s'))][int(m.group('ep'))]
-					comment.reply('**Seinfeld: Season '+m.group('s')+' Episode '+m.group('ep')+'**'+\
-								  '\n___\n'\
-								  '\n\n**Episode Name:** '+episode_info['episodename']+\
-								  '\n\n**Overview:** '+episode_info['overview']+\
-								  '\n\n**Director:** '+episode_info['director']+\
-								  '\n\n**Writer(s):** '+episode_info['writer']+\
-								  '\n\n**Rating:** '+episode_info['rating']+\
-								  '\n___\n'\
-								  '^| ^Hi! ^I\'m ^a ^bot ^for ^the ^subreddit [^/r/seinfeld](https://www.reddit.com/r/seinfeld) '\
-								  '^| [^Help ^me ^improve!](https://github.com/HeadlessChild/reddit-episode-bot) '\
-								  '^| [^Report ^a ^bug](https://github.com/HeadlessChild/reddit-episode-bot/issues) '\
-								  '^| [^Author](https://www.reddit.com/user/HeadlessChild/) '\
-								  '^| ^Data ^from ^[TheTVDB](http://thetvdb.com/) ')
-					cur.execute('INSERT INTO comments (ID) VALUES (%s)', [ID])
-					db.commit()
+					try:
+						episode_info = t[tvshow][int(m.group('s'))][int(m.group('ep'))]
+						comment.reply('**Seinfeld: Season '+m.group('s')+' Episode '+m.group('ep')+'**'+\
+									  '\n___\n'\
+									  '\n\n**Episode Name:** '+episode_info['episodename']+\
+									  '\n\n**Overview:** '+episode_info['overview']+\
+									  '\n\n**Director:** '+episode_info['director']+\
+									  '\n\n**Writer(s):** '+episode_info['writer']+\
+									  '\n\n**Rating:** '+episode_info['rating']+\
+									  '\n___\n'\
+									  '^| ^Hi! ^I\'m ^a ^bot ^for ^the ^subreddit [^/r/seinfeld](https://www.reddit.com/r/seinfeld) '\
+									  '^| [^Help ^me ^improve!](https://github.com/HeadlessChild/reddit-episode-bot) '\
+									  '^| [^Report ^a ^bug](https://github.com/HeadlessChild/reddit-episode-bot/issues) '\
+									  '^| [^Author](https://www.reddit.com/user/HeadlessChild/) '\
+									  '^| ^Data ^from ^[TheTVDB](http://thetvdb.com/) ')
+						cur.execute('INSERT INTO comments (ID) VALUES (%s)', [ID])
+						db.commit()
+					except (tvdb_exceptions.tvdb_seasonnotfound, tvdb_exceptions.tvdb_episodenotfound):
+						pass
 				except praw.errors.RateLimitExceeded as error:
 					print("Rate limit exceeded, must sleep for "
 							"{} mins".format(float(error.sleep_time / 60)))
