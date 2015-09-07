@@ -2,6 +2,7 @@ import re
 import praw
 import time
 import MySQLdb
+import OpenSSL
 import tvdb_api
 import tvdb_exceptions
 
@@ -48,7 +49,7 @@ patterns = [pattern1, pattern2, pattern3, pattern4, pattern5, pattern6, pattern7
 
 def run_bot():
 	subreddit = r.get_subreddit("seinfeld")
-	comments = subreddit.get_comments(limit=100)
+	comments = subreddit.get_comments(limit=512)
 	for comment in comments:
 		comment_text = comment.body.lower()
 		for p in patterns:
@@ -76,7 +77,7 @@ def run_bot():
 									  '^| ^Data ^from ^[TheTVDB](http://thetvdb.com/) ^|')
 						cur.execute('INSERT INTO comments (ID) VALUES (%s)', [ID])
 						db.commit()
-					except (tvdb_exceptions.tvdb_seasonnotfound, tvdb_exceptions.tvdb_episodenotfound):
+					except (tvdb_exceptions.tvdb_seasonnotfound, tvdb_exceptions.tvdb_episodenotfound, praw.errors.InvalidComment):
 						pass
 				except praw.errors.RateLimitExceeded as error:
 					print("Rate limit exceeded, must sleep for "
@@ -101,5 +102,8 @@ def run_bot():
 					db.commit()
 
 while True:
-	run_bot()
-	time.sleep(25)
+	try:
+		run_bot()
+		time.sleep(25)
+	except (praw.errors.HTTPException, OpenSSL.SSL.SysCallError):
+		time.sleep(30)
