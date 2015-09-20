@@ -5,6 +5,7 @@ import MySQLdb
 import OpenSSL
 import tvdb_api
 import tvdb_exceptions
+import requests
 
 from configparser import ConfigParser
 
@@ -77,6 +78,7 @@ def run_bot():
 									  '^| ^Data ^from ^[TheTVDB](http://thetvdb.com/) ^|')
 						cur.execute('INSERT INTO comments (ID) VALUES (%s)', [ID])
 						db.commit()
+						print("Replied to a comment (ID="+ID+")")
 					except (tvdb_exceptions.tvdb_seasonnotfound, tvdb_exceptions.tvdb_episodenotfound, praw.errors.InvalidComment):
 						pass
 				except praw.errors.RateLimitExceeded as error:
@@ -100,10 +102,14 @@ def run_bot():
 								  '^| ^Data ^from ^[TheTVDB](http://thetvdb.com/) ^|')
 					cur.execute('INSERT INTO comments (ID) VALUES (%s)', [ID])
 					db.commit()
+					print("Replied to a comment (ID="+ID+")")
 
 while True:
 	try:
 		run_bot()
 		time.sleep(25)
-	except (praw.errors.HTTPException, OpenSSL.SSL.SysCallError):
+	except (praw.errors.HTTPException,
+			OpenSSL.SSL.SysCallError,
+			requests.exceptions.ReadTimeout,
+			requests.exceptions.ConnectionError):
 		time.sleep(30)
