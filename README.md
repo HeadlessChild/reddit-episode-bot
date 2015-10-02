@@ -26,12 +26,6 @@ Enable and start mysql (MariaDB) service:
 
 NOTE: Enable will start MariaDB at boot.
 
-## Run the bot
-To run the bot you simply run the following command:
-```
-python reddit-episode-bot.py
-```
-
 ## Config
 Create a ```.reddit-bot-episode.conf``` at your home directory (/home/$(USER)/.reddit-episode-bot.conf).
 
@@ -48,6 +42,13 @@ Password = password
 Username = root
 password = root
 ```
+
+## Run the bot
+To run the bot you simply run the following command:
+```
+python reddit-episode-bot.py
+```
+
 # Docker
 You can run this bot inside a Docker container. You need a mysql database on the host and mount the socket to the container.
 
