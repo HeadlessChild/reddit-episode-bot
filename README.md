@@ -57,6 +57,7 @@ You have to mount the mysql socket inside the container, the following command w
 
     docker run \
               -d \
+              -v $HOME/.reddit-episode-bot.conf:/root/.reddit-episode-bot.conf \ #You have to create config file first
               -v /var/run/mysqld/mysqld.sock:/var/run/mysqld/mysqld.sock \  #Might have to change to suit your system
               --name reddit-episode-bot \
               markuslindberg/reddit-episode-bot
@@ -74,7 +75,7 @@ You can use this systemd service file for handling start/stop of the container. 
     ExecStartPre=-/usr/bin/docker kill reddit-episode-bot
     ExecStartPre=-/usr/bin/docker rm reddit-episode-bot
     ExecStartPre=/usr/bin/docker pull markuslindberg/reddit-episode-bot
-    ExecStart=/usr/bin/docker run -v /var/run/mysqld/mysqld.sock:/var/run/mysqld/mysqld.sock --name reddit-episode-bot markuslindberg/reddit-episode-bot
+    ExecStart=/usr/bin/docker run -v <path-to>/.reddit-episode-bot.conf:/root/.reddit-episode-bot.conf -v /var/run/mysqld/mysqld.sock:/var/run/mysqld/mysqld.sock --name reddit-episode-bot markuslindberg/reddit-episode-bot
     ExecStop=-/usr/bin/docker stop reddit-episode-bot
 
     [Install]

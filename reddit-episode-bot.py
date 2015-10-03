@@ -1,4 +1,5 @@
 import re
+import os
 import praw
 import time
 import MySQLdb
@@ -13,12 +14,13 @@ tvshow = "seinfeld"
 
 t = tvdb_api.Tvdb()
 
-r = praw.Reddit("browser-based:SeinfeldEpsisode Script:v1.0 (by /u/HeadlessChild)")
+r = praw.Reddit("browser-based:TV Show Script:v1.0 (by /u/HeadlessChild)")
 
 ### LOGIN ###
 config = ConfigParser()
-config.read("login.txt")
+config.read(os.getenv("HOME")+"/.reddit-episode-bot.conf")
 
+tvshow = config.get("Reddit", "Tvshow")
 username = config.get("Reddit", "Username")
 password = config.get("Reddit", "Password")
 
