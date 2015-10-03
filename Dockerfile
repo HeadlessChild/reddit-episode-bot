@@ -17,6 +17,6 @@ RUN pip install --upgrade cffi
 
 RUN pip install --upgrade pyopenssl
 
-COPY . /
+COPY reddit-episode-bot.py /
 
 CMD ["python", "reddit-episode-bot.py"]
