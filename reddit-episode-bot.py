@@ -43,7 +43,7 @@ cur.execute('CREATE TABLE IF NOT EXISTS comments(ID TEXT)')
 db.commit()
 ############
 
-pattern1 = re.compile(r"""(?:(\ss)|season)(?:\s)(?P<s>\d+)(?:.*)(?:(\se)|x|episode|\n)(?:\s)(\d+)""", re.VERBOSE)
+pattern1 = re.compile(r"""(?:(\ss)|season)(?:\s)(?P<s>\d+)(?:.*)(?:(\se)|x|episode|\n)(?:\s)(?P<ep>\d+)""", re.VERBOSE)
 pattern2 = re.compile(r"""(?:(\ss)|season)(?P<s>\d+)(?:(\se)|(\sx)|episode|\n)(?:\s)(?P<ep>\d+)""", re.VERBOSE)
 pattern3 = re.compile(r"""(?:(\ss)|season)(?:\s)(?P<s>\d+)(?:(\se)|(\sx)|episode|\n)(?P<ep>\d+)""", re.VERBOSE)
 pattern4 = re.compile(r"""(?:(\ss)|season)(?P<s>\d+)(?:(\se)|(\sx)|episode|\n)(?P<ep>\d+)""", re.VERBOSE)
