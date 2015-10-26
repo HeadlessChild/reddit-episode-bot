@@ -7,13 +7,8 @@ import OpenSSL
 import tvdb_api
 import tvdb_exceptions
 import requests
-import syslog
 
 from configparser import ConfigParser
-
-syslog.syslog(syslog.LOG_INFO, 'Process started')
-
-tvshow = "seinfeld"
 
 t = tvdb_api.Tvdb()
 
@@ -100,7 +95,6 @@ def run_bot():
 									  '^| ^Data ^from ^[TheTVDB](http://thetvdb.com/) ^|')
 						cur.execute('INSERT INTO comments (ID) VALUES (%s)', [ID])
 						db.commit()
-						syslog.syslog(syslog.LOG_INFO, 'Replied to a comment (ID='+ID+')')
 						print("Replied to a comment (ID="+ID+")")
 					except (tvdb_exceptions.tvdb_seasonnotfound, tvdb_exceptions.tvdb_episodenotfound, praw.errors.InvalidComment):
 						pass
@@ -125,7 +119,6 @@ def run_bot():
 								  '^| ^Data ^from ^[TheTVDB](http://thetvdb.com/) ^|')
 					cur.execute('INSERT INTO comments (ID) VALUES (%s)', [ID])
 					db.commit()
-					syslog.syslog(syslog.LOG_INFO, 'Replied to a comment (ID='+ID+')')
 					print("Replied to a comment (ID="+ID+")")
 
 while True:
