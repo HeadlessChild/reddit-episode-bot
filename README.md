@@ -10,7 +10,7 @@ Install the following Debian packages:
 
 Install the following pypi packages:
   ```
-  sudo pip install pyopenssl praw tvdb_api
+  sudo pip install -r requirements.txt
   ```
   
 ## Database
