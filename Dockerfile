@@ -1,6 +1,8 @@
 FROM debian
 MAINTAINER Markus Lindberg <markus@lindberg.io>
 
+COPY requirements.txt /
+
 RUN apt-get update && apt-get install -y \
 	python-mysqldb \
 	python-pip \
@@ -9,9 +11,7 @@ RUN apt-get update && apt-get install -y \
 	libssl-dev \
 	python-dev
 
-RUN pip install tvdb_api \
-	pyopenssl \
-	praw
+RUN pip install -r requirements.txt
 
 RUN pip install --upgrade cffi
 
