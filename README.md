@@ -1,3 +1,5 @@
+[![Build Status](https://jenkins.lindberg.io/buildStatus/icon?job=reddit-episode-bot)](https://jenkins.lindberg.io/job/reddit-episode-bot/)
+
 # reddit-episode-bot
 This bot will look for comments referencing episodes for a tv show. If it finds one it will respond with some scaled-down information about that particular episode.
 
