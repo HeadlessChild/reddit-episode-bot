@@ -10,7 +10,7 @@ Install the following Debian packages:
   sudo apt-get install python-mysqldb python-configparser python-pip
   ```
 
-Install the following pypi packages:
+Install the required pypi packages:
   ```
   sudo pip install -r requirements.txt
   ```
