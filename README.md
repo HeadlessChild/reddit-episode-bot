@@ -4,8 +4,8 @@
 This bot will look for comments referencing episodes for a tv show. If it finds one it will respond with some scaled-down information about that particular episode.
 
 ![alt tag](https://raw.github.com/HeadlessChild/reddit-episode-bot/master/Screenshots/9h3ea.jpg)
-## Install
-Install the following Debian packages:
+## Install packages
+Install the required Debian packages:
   ```
   sudo apt-get install python-mysqldb python-configparser python-pip
   ```
@@ -15,7 +15,7 @@ Install the following pypi packages:
   sudo pip install -r requirements.txt
   ```
   
-## Database
+## Database (MySQL)
 You need to have a SQL database on your host, I use MariaDB. To install MariaDB do the following:  
   ```
   sudo apt-get install mariadb-server-10.0 mariadb-client-10.0 mariadb-server-core-10.0  mariadb-client-core-10.0 maridb-common
