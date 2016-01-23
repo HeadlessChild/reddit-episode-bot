@@ -1,0 +1,3 @@
+pyopenssl
+praw
+tvdb_api
